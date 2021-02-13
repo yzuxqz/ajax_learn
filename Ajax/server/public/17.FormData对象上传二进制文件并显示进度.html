@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<style>
+    .progress {
+        height: 20px;
+        width: 500px;
+
+    }
+
+    .progress-bar {
+        height: 20px;
+        width: 0%;
+        background-color: pink;
+    }
+</style>
+
+<body>
+
+    <input type="file" id="file">
+    <div class="progress">
+        <div class="progress-bar" id="bar"></div>
+    </div>
+    <div id="box"></div>
+
+    <script>
+        var file = document.getElementById('file');
+        var bar = document.getElementById('bar');
+        var box = document.getElementById('box');
+        file.onchange = function () {
+            //创建空的表单对象
+            var formData = new FormData();
+            //将用户选择的文件添加到表单对象中
+            formData.append('attrName', this.files[0]);
+            var xhr = new XMLHttpRequest();
+            xhr.open('post', 'http://localhost:3000/file');
+            //在文件上传的过程中持续触发
+            xhr.upload.onprogress = function (ev) {
+                var result = (ev.loaded / ev.total) * 100 + '%';
+                bar.style.width = result;
+                bar.innerHTML = result;
+            }
+            xhr.send(formData);
+            console.log(bar);
+
+            xhr.onload = function () {
+                if (xhr.status == 200) {
+                    var result = JSON.parse(xhr.responseText);
+                    //动态创建img标签
+                    var img = document.createElement('img');
+                    //设置src属性
+                    img.src = result.path;
+                    //等图片加载完成再显示在页面中
+                    img.onload = function () {
+                        box.appendChild(img);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>

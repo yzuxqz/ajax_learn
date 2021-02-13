@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script>
+        var xhr = new XMLHttpRequest();
+        //console.log(xhr.readyState); //0 已创建还未配置
+        xhr.open('get', 'http://localhost:3000/readystate');
+        //console.log(xhr.readyState); //1
+        //监听状态码
+        xhr.onreadystatechange = function () {
+            console.log(xhr.readyState); //2 3 4
+            // 如果状态码为4，则代表可以使用
+            if (xhr.readyState == 4) {
+               console.log(xhr.responseText);
+            }
+        }
+        xhr.send();
+    </script>
+</body>
+
+</html>

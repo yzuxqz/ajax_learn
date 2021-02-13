@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <p>
+        <input type="text" id="username">
+    </p>
+    <p>
+        <input type="text" id="age">
+    </p>
+    <p>
+        <input type="button" value="提交" id="btn">
+    </p>
+
+</body>
+<script type="text/javascript">
+    var btn = document.getElementById('btn');
+    var username = document.getElementById('username');
+    var age = document.getElementById('age');
+    btn.onclick = function () {
+        var xhr = new XMLHttpRequest();
+        xhr.open('post', 'http://localhost:3000/json');
+        xhr.setRequestHeader('Content-Type', 'application/json');
+        //    将json对象转为json字符串再发送
+        var json = {
+            Username: username.value,
+            Age: age.value,
+        };
+        json = JSON.stringify(json);
+        xhr.send(json);
+        xhr.onload = function () {
+            console.log(xhr.responseText);
+        }
+    }
+</script>
+
+</html>

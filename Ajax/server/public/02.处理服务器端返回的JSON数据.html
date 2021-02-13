@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script type="text/javascript">
+        var xhr = new XMLHttpRequest();
+        xhr.open('get', 'http://localhost:3000/responseDate');
+        xhr.send();
+        xhr.onload = function () {
+            //json字符串转对象
+            var responseText = JSON.parse(xhr.responseText);
+            var str = '<h2>' + responseText.name + '</h2>';
+            document.body.innerHTML = str;
+        }
+    </script>
+</body>
+
+</html>

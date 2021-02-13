@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <select name="" id="province">
+
+    </select>
+    <select name="" id="city">
+        <option value="">请选择城市</option>
+    </select>
+    <select name="" id="area">
+        <option value="">请选择县城</option>
+    </select>
+    <script src="/js/ajax.js"></script>
+    <script src="/js/template-web.js"></script>
+    <!-- 省份下拉框模板 -->
+    <script type="text/html" id="provinceTpl">
+        <option value="">请选择省份</option>
+        {{each province}}
+        <option value="{{$value.id}}">{{$value.name}}</option>
+        {{/each}}
+    </script>
+    <!-- 城市下拉框模板 -->
+    <script type="text/html" id="cityTpl">
+        <option value="">请选择城市</option>
+        {{each city}}
+        <option value="{{$value.id}}">{{$value.name}}</option>
+        {{/each}}
+    </script>
+    <!-- 县下拉框列表 -->
+    <script type="text/html" id="areaTpl">
+        <option value="">请选择县城</option>
+        {{each area}}
+        <option value="{{$value.id}}">{{$value.name}}</option>
+        {{/each}}
+    </script>
+    <script>
+        //获取下拉框
+        var province = document.getElementById('province');
+        var city = document.getElementById('city');
+        var area = document.getElementById('area');
+        //获取省份信息
+        ajax({
+            type: 'get',
+            url: 'http://localhost:3000/province',
+            success: function (data) {
+                //调用temoplate方法将返回的数据传入指定的模板中
+                var html = template('provinceTpl', {
+                    province: data
+                });
+                //将拼接好的字符串放入body中
+                province.innerHTML = html;
+            }
+        });
+
+        //为省份的下拉菜单添加值改变事件
+        province.onchange = function () {
+            //获取当前的省份id
+            var pid = this.value;
+            //防止在选择别的省份时，县城框中还有原来的数据，所以要清空
+            var html = template('areaTpl', {
+                area: []
+            });
+            area.innerHTML = html;
+            //根据省份id获取城市信息
+            ajax({
+                type: 'get',
+                url: '/cities',
+                data: {
+                    id: pid
+                },
+                success: function (data) {
+                    var html = template('cityTpl', {
+                        city: data
+                    });
+
+                    city.innerHTML = html;
+
+                }
+            })
+        }
+
+        //为城市的下拉菜单添加值改变事件
+        city.onchange = function () {
+            var cid = this.value;
+            ajax({
+                type: 'get',
+                url: '/areas',
+                data: {
+                    id: cid
+                },
+                success: function (data) {
+                    var html = template('areaTpl', {
+                        area: data
+                    });
+                    area.innerHTML = html;
+                }
+            })
+        }
+    </script>
+</body>
+
+</html>

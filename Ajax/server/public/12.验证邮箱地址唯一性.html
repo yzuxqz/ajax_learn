@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <input type="email" placeholder="请输入邮箱地址">
+    <p id="info"></p>
+    <script src="/js/ajax.js"></script>
+    <script>
+        var ipt = document.querySelector('input');
+        var info = document.getElementById('info');
+        //当文本框离开焦点
+        ipt.onblur = function () {
+            var email = this.value;
+            var reg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/;
+            if (!reg.test(email)) { //首先格式是否正确
+                info.innerHTML = '请输入符合规则的邮箱地址';
+                return; //阻止程序向下执行
+            };
+            //向服务器端发送请求
+            ajax({
+                type: 'get',
+                url: 'http://localhost:3000/verifyEmailAdress',
+                data: {
+                    email: email
+                },
+                success: function (result) {
+                    info.innerHTML = result;
+                    inner
+                },
+                error: function (result) {
+                    console.log(result);
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>
